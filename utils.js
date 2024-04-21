@@ -201,6 +201,24 @@ function moveToFlag(creeps, flag) {
   });
 }
 
+/**
+ *
+ * @param {Creep[]} creeps
+ * @param {string} spawn
+ */
+function moveToSpawn(creeps, spawn) {
+  let target = Game.spawns[spawn];
+  if (!target) {
+    console.log(`[-] spawn: ${spawn} not found`);
+  }
+  creeps.forEach((creep) => {
+    let n = creep.moveTo(target.pos);
+    if (n != 0) {
+      console.log(`[-] ${creep.name} can't move to ${spawn}`);
+    }
+  });
+}
+
 module.exports = {
   clear_creeps: clear_creeps,
   watch_spawn: watch_spawn,
@@ -213,4 +231,5 @@ module.exports = {
   transFree: transFree,
   get_room_energy: get_room_energy,
   moveToFlag: moveToFlag,
+  moveToSpawn: moveToSpawn,
 };
