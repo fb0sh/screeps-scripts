@@ -63,7 +63,7 @@ function get_creeps(spawn, category) {
  *
  * @param {string} spawn
  */
-function get_room_energy(spawn) {
+function get_room_spawn_energy(spawn) {
   let theSpawn = Game.spawns[spawn];
   let energy_structures = theSpawn.room.find(FIND_STRUCTURES, {
     filter: (structure) => {
@@ -73,11 +73,11 @@ function get_room_energy(spawn) {
       );
     },
   });
-  let room_total_energy = 0;
+  let room_spawn_energy = 0;
   energy_structures.forEach((structure) => {
-    room_total_energy += structure.store.energy;
+    room_spawn_energy += structure.store.energy;
   });
-  return room_total_energy;
+  return room_spawn_energy;
 }
 
 /**
@@ -96,7 +96,7 @@ function watch_spawn(spawn, category, number, body) {
   if (creeps.length < number) {
     let name = category + Game.time;
     // 看能量是否可以 创建新的 creep
-    let room_total_energy = get_room_energy(spawn);
+    let room_total_energy = get_room_spawn_energy(spawn);
     if (room_total_energy > cost) {
       let status = theSpawn.spawnCreep(body, name, {
         memory: { role: category, spawn: spawn },
@@ -125,8 +125,6 @@ function watch_spawn(spawn, category, number, body) {
 function trans2(creep, category) {
   creep.say(`${creep.memory.role}->${category}`);
   creep.memory.role = category;
-  let new_name = creep.name.replace(creep.memory.role, category);
-  creep.name = new_name;
 }
 /**
  *
@@ -229,7 +227,7 @@ module.exports = {
   transFulled: transFulled,
   transPart: transPart,
   transFree: transFree,
-  get_room_energy: get_room_energy,
+  get_room_spawn_energy: get_room_spawn_energy,
   moveToFlag: moveToFlag,
   moveToSpawn: moveToSpawn,
 };
