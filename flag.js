@@ -1,3 +1,11 @@
+function get_flags() {
+  let flags = [];
+  for (let name in Game.flags) {
+    flags.push(name);
+  }
+  return flags.sort();
+}
+
 /**
  *
  * @param {Creep[]} creeps
@@ -22,3 +30,4 @@ function run(creeps, fn_list, f) {
 }
 
 module.exports.run = run;
+module.exports.get_flags = get_flags;

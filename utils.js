@@ -59,6 +59,27 @@ function get_creeps(category) {
 /**
  *
  * @param {string} spawn
+ */
+function get_room_energy(spawn) {
+  let theSpawn = Game.spawns[spawn];
+  let energy_structures = theSpawn.room.find(FIND_STRUCTURES, {
+    filter: (structure) => {
+      return (
+        structure.structureType == STRUCTURE_EXTENSION ||
+        structure.structureType == STRUCTURE_SPAWN
+      );
+    },
+  });
+  let room_total_energy = 0;
+  energy_structures.forEach((structure) => {
+    room_total_energy += structure.store.energy;
+  });
+  return room_total_energy;
+}
+
+/**
+ *
+ * @param {string} spawn
  * @param {string} category
  * @param {number} number
  * @param { BodyPartConstant[]} body
@@ -72,7 +93,8 @@ function watch_spawn(spawn, category, number, body) {
   if (creeps.length < number) {
     let name = category + Game.time;
     // 看能量是否可以 创建新的 creep
-    if (theSpawn.store.energy > cost) {
+    let room_total_energy = get_room_energy(spawn);
+    if (room_total_energy > cost) {
       let status = theSpawn.spawnCreep(body, name, {
         memory: { role: category },
       });
@@ -98,9 +120,9 @@ function watch_spawn(spawn, category, number, body) {
  * @param {string} category
  */
 function trans2(creep, category) {
-  creep.say(`Frome ${creep.memory.role} to ${category}`);
+  creep.say(`${creep.memory.role}->${category}`);
   creep.memory.role = category;
-  let new_name = creep.name.replace(creep.memory.role, category + "_");
+  let new_name = creep.name.replace(creep.memory.role, category);
   creep.name = new_name;
 }
 /**
@@ -114,6 +136,34 @@ function transAll(creeps, category) {
   });
 }
 
+/**
+ *
+ * @param {Creep[]} creeps
+ * @param {string} category
+ */
+function transFulled(creeps, category) {
+  let cs = [];
+  creeps.forEach((creep) => {
+    if (creep.store.getFreeCapacity() == 0) {
+      cs.push(creep);
+    }
+  });
+  transAll(cs, category);
+}
+/**
+ *
+ * @param {Creep[]} creeps
+ * @param {string} category
+ * @param {number} number
+ */
+function transPart(creeps, category, number) {
+  let cs = [];
+  for (let i = 0; i < number && i < creeps.length; i++) {
+    cs.push(creeps[i]);
+  }
+  transAll(cs, category);
+}
+
 module.exports = {
   clear_creeps: clear_creeps,
   watch_spawn: watch_spawn,
@@ -121,4 +171,7 @@ module.exports = {
   count_cost: count_cost,
   trans2: trans2,
   transAll: transAll,
+  transFulled: transFulled,
+  transPart: transPart,
+  get_room_energy: get_room_energy,
 };
