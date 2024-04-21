@@ -4,22 +4,22 @@ const role_harvester = require("role.harvester");
 const role_upgrader = require("role.upgrader");
 const role_builder = require("role.builder");
 
-const need_mine = false;
-const need_upgrade = true;
+const need_harvest = true;
+const need_upgrade = false;
 const need_build = true;
 
 module.exports.loop = () => {
   utils.clear_creeps();
 
-  utils.watch_spawn("s1", "harvester", 0, [WORK, MOVE, CARRY]);
-  utils.watch_spawn("s1", "builder", 0, [WORK, MOVE, MOVE, CARRY]);
-  utils.watch_spawn("s1", "upgrader", 24, [WORK, MOVE, MOVE, CARRY, CARRY]);
+  utils.watch_spawn("s1", "harvester", 7, [WORK, MOVE, CARRY]);
+  utils.watch_spawn("s1", "builder", 10, [WORK, MOVE, MOVE, CARRY]);
+  utils.watch_spawn("s1", "upgrader", 0, [WORK, MOVE, MOVE, CARRY, CARRY]);
 
   let harvesters = utils.get_creeps("s1", "harvester");
   let builders = utils.get_creeps("s1", "builder");
   let upgraders = utils.get_creeps("s1", "upgrader");
 
-  if (need_mine) {
+  if (need_harvest) {
     flag.run(
       harvesters,
       [
@@ -51,7 +51,7 @@ module.exports.loop = () => {
   }
 
   //   utils.transAll(harvesters, "upgrader");
-  //   utils.transAll(builders, "upgrader");
+  // utils.transAll(upgraders, "builder");
   //   utils.transFulled(harvesters, "builder");
   //   utils.transPart(upgraders, "harvester", 2);
   //   utils.transFree(harvesters, "builder");

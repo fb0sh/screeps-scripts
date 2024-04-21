@@ -20,11 +20,18 @@ function harvester_flag_run(creeps, flags) {
         console.log(`[-] harvester_flag_run(harvest):[${creep.name}] ${n}`);
       }
     } else {
-      let targets = creep.room.find(FIND_STRUCTURES, {
+      // 收集完资源去哪个spawn 的room保存 默认是创建它的spawn所在room
+      let room = Game.spawns[creep.memory.spawn].room;
+      if (flags[1]) {
+        room = Game.spawns[flags[1]].room;
+      }
+
+      let targets = room.find(FIND_STRUCTURES, {
         filter: (structure) => {
           return (
             (structure.structureType == STRUCTURE_EXTENSION ||
-              structure.structureType == STRUCTURE_SPAWN) &&
+              structure.structureType == STRUCTURE_SPAWN ||
+              structure.structureType == STRUCTURE_CONTAINER) &&
             structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
           );
         },
