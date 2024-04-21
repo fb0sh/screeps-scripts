@@ -7,19 +7,61 @@ const role_builder = require("role.builder");
 function run() {
   const SPAWN_NAME = "s1";
   const need_harvest = true;
-  const need_upgrade = true;
   const need_build = true;
+  const need_upgrade = true;
 
-  utils.watch_spawn(SPAWN_NAME, "harvester", 5, [WORK, MOVE, CARRY]);
-  utils.watch_spawn(SPAWN_NAME, "builder", 20, [WORK, MOVE, CARRY]);
-  utils.watch_spawn(SPAWN_NAME, "upgrader", 20, [WORK, MOVE, CARRY]);
+  const harvest_number = 10;
+  const builder_number = 10;
+  const upgrader_number = 20;
 
   let harvesters = utils.get_creeps(SPAWN_NAME, "harvester");
   let builders = utils.get_creeps(SPAWN_NAME, "builder");
   let upgraders = utils.get_creeps(SPAWN_NAME, "upgrader");
 
+  if (harvesters.length != harvest_number) {
+    utils.watch_spawn(SPAWN_NAME, "harvester", harvest_number, [
+      WORK,
+      MOVE,
+      CARRY,
+    ]);
+  } else {
+    if (builders.length != builder_number) {
+      utils.watch_spawn(SPAWN_NAME, "builder", builder_number, [
+        WORK,
+        MOVE,
+        CARRY,
+      ]);
+    } else {
+      if (upgraders.length != upgrader_number) {
+        utils.watch_spawn(SPAWN_NAME, "upgrader", upgrader_number, [
+          WORK,
+          MOVE,
+          CARRY,
+        ]);
+      }
+    }
+  }
+
   if (need_harvest) {
-    flag.run(harvesters, [[5, ["e1"]]], role_harvester.harvester_flag_run);
+    flag.run(
+      harvesters,
+      [
+        [5, ["e1"]],
+        [5, ["e2"]],
+      ],
+      role_harvester.harvester_flag_run
+    );
+  }
+
+  if (need_build) {
+    flag.run(
+      builders,
+      [
+        [5, ["e2"]],
+        [5, ["e5"]],
+      ],
+      role_builder.builder_flag_run
+    );
   }
 
   if (need_upgrade) {
@@ -33,17 +75,6 @@ function run() {
       role_upgrader.upgrader_flag_run
     );
   }
-  if (need_build) {
-    flag.run(
-      builders,
-      [
-        [5, ["e1"]],
-        [8, ["e5"]],
-        [7, ["e2"]],
-      ],
-      role_builder.builder_flag_run
-    );
-  }
 
   // utils.transAll(builders, "harvester");
   // utils.transAll(upgraders, "builder");
@@ -53,7 +84,7 @@ function run() {
 
   let spawn_energy = utils.get_room_spawn_energy(SPAWN_NAME);
   console.log(
-    `(${SPAWN_NAME}) spawn_energy: ${spawn_energy} | harvesters: ${harvesters.length} | upgrader: ${upgraders.length} | builder: ${builders.length} |`
+    `(${SPAWN_NAME}) spawn_energy: ${spawn_energy} | harvesters: ${harvesters.length} | builder: ${builders.length} | upgrader: ${upgraders.length} |`
   );
   return {
     name: SPAWN_NAME,

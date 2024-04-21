@@ -97,7 +97,7 @@ function watch_spawn(spawn, category, number, body) {
     let name = category + Game.time;
     // 看能量是否可以 创建新的 creep
     let room_total_energy = get_room_spawn_energy(spawn);
-    if (room_total_energy > cost) {
+    if (room_total_energy >= cost) {
       let status = theSpawn.spawnCreep(body, name, {
         memory: { role: category, spawn: spawn },
       });
