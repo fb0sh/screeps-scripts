@@ -9,15 +9,21 @@ function harvester_flag_run(creeps, flags) {
     console.log(`[-] flag: ${flags[0]} not found`);
   }
 
-  let source = source_flag.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-
   creeps.forEach((creep) => {
     if (creep.store.getFreeCapacity() > 0) {
-      let n = creep.harvest(source);
-      if (n == ERR_NOT_IN_RANGE) {
-        creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
-      } else if (n != 0) {
-        console.log(`[-] harvester_flag_run(harvest):[${creep.name}] ${n}`);
+      try {
+        let source = source_flag.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+        let n = creep.harvest(source);
+        if (n == ERR_NOT_IN_RANGE) {
+          creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
+        } else if (n != 0) {
+          console.log(`[-] harvester_flag_run(harvest):[${creep.name}] ${n}`);
+        }
+      } catch (error) {
+        creep.say(`Move to ${flags[0]}`);
+        creep.moveTo(source_flag.pos, {
+          visualizePathStyle: { stroke: "#FF0000" },
+        });
       }
     } else {
       // 收集完资源去哪个spawn 的room保存 默认是创建它的spawn所在room

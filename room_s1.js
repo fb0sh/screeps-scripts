@@ -10,8 +10,8 @@ function run() {
   const need_upgrade = false;
   const need_build = true;
   utils.watch_spawn(SPAWN_NAME, "harvester", 8, [WORK, MOVE, CARRY]);
-  utils.watch_spawn(SPAWN_NAME, "builder", 20, [WORK, MOVE, MOVE, CARRY]);
-  utils.watch_spawn(SPAWN_NAME, "upgrader", 0, [
+  utils.watch_spawn(SPAWN_NAME, "builder", 10, [WORK, MOVE, MOVE, CARRY]);
+  utils.watch_spawn(SPAWN_NAME, "upgrader", 5, [
     WORK,
     MOVE,
     MOVE,
@@ -38,14 +38,8 @@ function run() {
     flag.run(
       upgraders,
       [
-        [3, ["es1", "c1"]],
-        [4, ["es2", "c1"]],
-        [2, ["es3", "c1"]],
-        [4, ["es4", "c1"]],
-        [4, ["es5", "c1"]],
-        [4, ["es6", "c1"]],
-        [5, ["es7", "c1"]],
-        [5, ["es8", "c1"]],
+        [3, ["es4", "c1"]],
+        [2, ["es5", "c1"]],
       ],
       role_upgrader.upgrader_flag_run
     );
@@ -61,13 +55,17 @@ function run() {
   //   utils.transPart(upgraders, "harvester", 2);
   //   utils.transFree(harvesters, "builder");
 
+  let total_energy = utils.get_room_energy(SPAWN_NAME);
   console.log(
-    `(${SPAWN_NAME}) total_energy: ${utils.get_room_energy(
-      SPAWN_NAME
-    )} | harvesters: ${harvesters.length} | upgrader: ${
-      upgraders.length
-    } | builder: ${builders.length} | flags: ${flag.get_flags()}`
+    `(${SPAWN_NAME}) total_energy: ${total_energy} | harvesters: ${harvesters.length} | upgrader: ${upgraders.length} | builder: ${builders.length} |`
   );
+  return {
+    name: SPAWN_NAME,
+    energy: total_energy,
+    harvesters: harvesters,
+    builders: builders,
+    upgraders: upgraders,
+  };
 }
 
 module.exports.run = run;
