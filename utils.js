@@ -90,7 +90,7 @@ function get_room_energy(spawn) {
 function watch_spawn(spawn, category, number, body) {
   // 拿到传进来的 spawn
   let theSpawn = Game.spawns[spawn];
-  let creeps = get_creeps(category);
+  let creeps = get_creeps(spawn, category);
   let cost = count_cost(body);
 
   if (creeps.length < number) {
@@ -153,6 +153,22 @@ function transFulled(creeps, category) {
   });
   transAll(cs, category);
 }
+
+/**
+ *
+ * @param {Creep[]} creeps
+ * @param {string} category
+ */
+function transFree(creeps, category) {
+  let cs = [];
+  creeps.forEach((creep) => {
+    if (creep.store.getUsedCapacity() == 0) {
+      cs.push(creep);
+    }
+  });
+  transAll(cs, category);
+}
+
 /**
  *
  * @param {Creep[]} creeps
@@ -167,6 +183,24 @@ function transPart(creeps, category, number) {
   transAll(cs, category);
 }
 
+/**
+ *
+ * @param {Creep[]} creeps
+ * @param {string} flag
+ */
+function moveToFlag(creeps, flag) {
+  let target = Game.flags[flag];
+  if (!target) {
+    console.log(`[-] flag: ${flag} not found`);
+  }
+  creeps.forEach((creep) => {
+    let n = creep.moveTo(target.pos);
+    if (n != 0) {
+      console.log(`[-] ${creep.name} can't move to ${flag}`);
+    }
+  });
+}
+
 module.exports = {
   clear_creeps: clear_creeps,
   watch_spawn: watch_spawn,
@@ -176,5 +210,7 @@ module.exports = {
   transAll: transAll,
   transFulled: transFulled,
   transPart: transPart,
+  transFree: transFree,
   get_room_energy: get_room_energy,
+  moveToFlag: moveToFlag,
 };

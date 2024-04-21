@@ -3,7 +3,7 @@
  * @param {Creep[]} creeps
  * @param {string[]} flags
  */
-function miner_flag_run(creeps, flags) {
+function harvester_flag_run(creeps, flags) {
   let source_flag = Game.flags[flags[0]];
   if (!source_flag) {
     console.log(`[-] flag: ${flags[0]} not found`);
@@ -17,7 +17,7 @@ function miner_flag_run(creeps, flags) {
       if (n == ERR_NOT_IN_RANGE) {
         creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
       } else if (n != 0) {
-        console.log(`[-] miner_flag_run(harvest):[${creep.name}] ${n}`);
+        console.log(`[-] harvester_flag_run(harvest):[${creep.name}] ${n}`);
       }
     } else {
       let targets = creep.room.find(FIND_STRUCTURES, {
@@ -36,11 +36,11 @@ function miner_flag_run(creeps, flags) {
             visualizePathStyle: { stroke: "#ffffff" },
           });
         } else if (n != 0 || n != -4) {
-          console.log(`[-] miner_flag_run(transfer):[${creep.name}] ${n}`);
+          console.log(`[-] harvester_flag_run(transfer):[${creep.name}] ${n}`);
         }
       }
     }
   });
 }
 
-module.exports.miner_flag_run = miner_flag_run;
+module.exports.harvester_flag_run = harvester_flag_run;
