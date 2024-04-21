@@ -11,27 +11,19 @@ const need_build = true;
 module.exports.loop = () => {
   utils.clear_creeps();
 
-  utils.watch_spawn("s1", "miner", 5, [WORK, MOVE, CARRY]);
+  utils.watch_spawn("s1", "miner", 7, [WORK, MOVE, CARRY]);
   utils.watch_spawn("s1", "builder", 0, [WORK, MOVE, MOVE, CARRY]);
-  utils.watch_spawn("s1", "upgrader", 24, [
-    WORK,
-    MOVE,
-    MOVE,
-    MOVE,
-    MOVE,
-    CARRY,
-    CARRY,
-  ]);
+  utils.watch_spawn("s1", "upgrader", 24, [WORK, MOVE, MOVE, CARRY, CARRY]);
 
-  let miners = utils.get_creeps("miner");
-  let builders = utils.get_creeps("builder");
-  let upgraders = utils.get_creeps("upgrader");
+  let miners = utils.get_creeps("s1", "miner");
+  let builders = utils.get_creeps("s1", "builder");
+  let upgraders = utils.get_creeps("s1", "upgrader");
 
   if (need_mine) {
     flag.run(
       miners,
       [
-        [2, ["es1"]],
+        [4, ["es1"]],
         [3, ["es2"]],
       ],
       role_miner.miner_flag_run

@@ -47,12 +47,15 @@ function clear_creeps() {
 }
 
 /**
- *
+ * @param {string} spawn
  * @param {string} category
  * @returns {Creep[]} creeps
  */
-function get_creeps(category) {
-  let creeps = _.filter(Game.creeps, (creep) => creep.memory.role == category);
+function get_creeps(spawn, category) {
+  let creeps = _.filter(
+    Game.creeps,
+    (creep) => creep.memory.role == category && creep.memory.spawn == spawn
+  );
   return creeps.sort();
 }
 
@@ -96,7 +99,7 @@ function watch_spawn(spawn, category, number, body) {
     let room_total_energy = get_room_energy(spawn);
     if (room_total_energy > cost) {
       let status = theSpawn.spawnCreep(body, name, {
-        memory: { role: category },
+        memory: { role: category, spawn: spawn },
       });
       console.log(
         `(${status}) Spawning new ${category} creep: ${name}, cost: ${cost}`
