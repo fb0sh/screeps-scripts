@@ -54,6 +54,8 @@ function harvester_flag_run(creeps, flags) {
         );
       }
 
+      console.log(creep.name, targets);
+
       if (targets.length > 0) {
         let n = creep.transfer(targets[0], RESOURCE_ENERGY);
         if (n == ERR_NOT_IN_RANGE) {
