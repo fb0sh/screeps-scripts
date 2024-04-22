@@ -8,77 +8,75 @@ function run() {
   const SPAWN_NAME = "s1";
   let = WATCH_QUEUE = [];
   let harvesters = utils.getCreepsBySpawn(SPAWN_NAME, "harvester");
-  let builders = utils.getCreepsBySpawn(SPAWN_NAME, "builder");
   let upgraders = utils.getCreepsBySpawn(SPAWN_NAME, "upgrader");
+  let builders = utils.getCreepsBySpawn(SPAWN_NAME, "builder");
 
   // ================================== 手动操作区 ==================================
   const need_harvest = true;
   const need_build = true;
   const need_upgrade = true;
 
-  WATCH_QUEUE.push([SPAWN_NAME, "harvester", 10, [WORK, MOVE, CARRY]]);
-  WATCH_QUEUE.push([SPAWN_NAME, "builder", 0, [WORK, MOVE, CARRY]]);
-  WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 35, [WORK, MOVE, CARRY]]);
+  WATCH_QUEUE.push([
+    SPAWN_NAME,
+    "harvester",
+    2,
+    [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+  ]);
+  WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 1, [WORK, MOVE, MOVE, CARRY]]);
+  WATCH_QUEUE.push([SPAWN_NAME, "builder", 35, [WORK, MOVE, MOVE, CARRY]]);
 
   const HARVESTER_GROUP = [
     {
-      number: 5,
+      number: 2,
       flags: {
         source_flag: "e1",
-      },
-    },
-    {
-      number: 5,
-      flags: {
-        source_flag: "e6",
       },
     },
   ];
   const BUILDER_GROUP = [
     {
-      number: 5,
+      number: 2,
+      flags: {
+        source_flag: "e1",
+      },
+    },
+    {
+      number: 8,
       flags: {
         source_flag: "e6",
       },
     },
     {
-      number: 5,
+      number: 8,
       flags: {
-        source_flag: "e5",
-      },
-    },
-  ];
-  const UPGRADER_GROUP = [
-    {
-      number: 10,
-      flags: {
-        source_flag: "e5",
-        controller_flag: "c1",
+        source_flag: "e10",
       },
     },
     {
-      number: 10,
+      number: 9,
       flags: {
         source_flag: "e3",
-        controller_flag: "c1",
       },
     },
     {
-      number: 10,
+      number: 8,
       flags: {
         source_flag: "e4",
         controller_flag: "c1",
       },
     },
+  ];
+
+  const UPGRADER_GROUP = [
     {
-      number: 5,
+      number: 1,
       flags: {
-        source_flag: "e6",
-        controller_flag: "c1",
+        source_flag: "e1",
       },
     },
   ];
 
+  // utils.recoverLastCategory(upgraders, "builder");
   // utils.transAll(builders, "upgrader");
 
   // utils.transAll(builders, "harvester");

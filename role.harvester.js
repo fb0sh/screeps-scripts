@@ -12,22 +12,16 @@ function harvester_flag_run(creeps, flags) {
 
   creeps.forEach((creep) => {
     creep.say("🪓");
-    if (creep.store.getFreeCapacity() > 0) {
-      try {
-        let source = _source_flag.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-        let n = creep.harvest(source);
-        if (n == ERR_NOT_IN_RANGE) {
-          creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
-        } else if (n != 0) {
-          console.log(`[-] harvester_flag_run(harvest):[${creep.name}] ${n}`);
-        }
-      } catch (error) {
-        creep.say(`Move to ${_source_flag}`);
-        creep.moveTo(_source_flag.pos, {
-          visualizePathStyle: { stroke: "#FF0000" },
-        });
-      }
-    } else {
+    if (creep.memory.saving && creep.store[RESOURCE_ENERGY] == 0) {
+      creep.memory.saving = false;
+      creep.say("🔄 harvest");
+    }
+    if (!creep.memory.saving && creep.store.getFreeCapacity() == 0) {
+      creep.memory.saving = true;
+      creep.say("saving");
+    }
+
+    if (creep.memory.saving) {
       // 收集完资源去哪个spawn 的room保存 默认是创建它的spawn所在room
       let room = Game.spawns[creep.memory.spawn].room;
       if (spawn) {
@@ -53,6 +47,21 @@ function harvester_flag_run(creeps, flags) {
         } else if (n != 0) {
           console.log(`[-] harvester_flag_run(transfer):[${creep.name}] ${n}`);
         }
+      }
+    } else {
+      try {
+        let source = _source_flag.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+        let n = creep.harvest(source);
+        if (n == ERR_NOT_IN_RANGE) {
+          creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
+        } else if (n != 0) {
+          console.log(`[-] harvester_flag_run(harvest):[${creep.name}] ${n}`);
+        }
+      } catch (error) {
+        creep.say(`Move to ${_source_flag}`);
+        creep.moveTo(_source_flag.pos, {
+          visualizePathStyle: { stroke: "#FF0000" },
+        });
       }
     }
   });

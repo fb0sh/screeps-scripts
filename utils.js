@@ -180,7 +180,7 @@ function watchSpawn(spawn, category, number, body) {
       });
 
       console.log(
-        `(${status}) Spawning new ${category} creep: ${name}, cost: ${cost}`
+        `[*] (${status}) Spawning new ${category} creep: ${name}, cost: ${cost}`
       );
     }
   }
@@ -207,6 +207,7 @@ function watchCreeps(watch_queue) {
     let category = watch_queue[i][1];
     let number = watch_queue[i][2];
     let body = watch_queue[i][3];
+    // console.log(category);
     if (!watchSpawn(spawn, category, number, body)) {
       break;
     }
