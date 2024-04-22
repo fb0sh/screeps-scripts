@@ -50,7 +50,7 @@ function harvester_flag_run(creeps, flags) {
           creep.moveTo(targets[0], {
             visualizePathStyle: { stroke: "#ffffff" },
           });
-        } else if (n != 0 || n != -4) {
+        } else if (n != 0) {
           console.log(`[-] harvester_flag_run(transfer):[${creep.name}] ${n}`);
         }
       }

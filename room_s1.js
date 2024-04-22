@@ -7,6 +7,9 @@ const role_builder = require("role.builder");
 function run() {
   const SPAWN_NAME = "s1";
   let = WATCH_QUEUE = [];
+  let harvesters = utils.getCreepsBySpawn(SPAWN_NAME, "harvester");
+  let builders = utils.getCreepsBySpawn(SPAWN_NAME, "builder");
+  let upgraders = utils.getCreepsBySpawn(SPAWN_NAME, "upgrader");
 
   // ================================== 手动操作区 ==================================
   const need_harvest = true;
@@ -14,8 +17,8 @@ function run() {
   const need_upgrade = true;
 
   WATCH_QUEUE.push([SPAWN_NAME, "harvester", 10, [WORK, MOVE, CARRY]]);
-  WATCH_QUEUE.push([SPAWN_NAME, "builder", 10, [WORK, MOVE, CARRY]]);
-  WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 20, [WORK, MOVE, CARRY]]);
+  WATCH_QUEUE.push([SPAWN_NAME, "builder", 0, [WORK, MOVE, CARRY]]);
+  WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 35, [WORK, MOVE, CARRY]]);
 
   const HARVESTER_GROUP = [
     {
@@ -27,7 +30,7 @@ function run() {
     {
       number: 5,
       flags: {
-        source_flag: "e2",
+        source_flag: "e6",
       },
     },
   ];
@@ -35,7 +38,7 @@ function run() {
     {
       number: 5,
       flags: {
-        source_flag: "e2",
+        source_flag: "e6",
       },
     },
     {
@@ -47,16 +50,16 @@ function run() {
   ];
   const UPGRADER_GROUP = [
     {
-      number: 1,
+      number: 10,
       flags: {
-        source_flag: "e1",
+        source_flag: "e5",
         controller_flag: "c1",
       },
     },
     {
-      number: 9,
+      number: 10,
       flags: {
-        source_flag: "e1",
+        source_flag: "e3",
         controller_flag: "c1",
       },
     },
@@ -67,7 +70,16 @@ function run() {
         controller_flag: "c1",
       },
     },
+    {
+      number: 5,
+      flags: {
+        source_flag: "e6",
+        controller_flag: "c1",
+      },
+    },
   ];
+
+  // utils.transAll(builders, "upgrader");
 
   // utils.transAll(builders, "harvester");
   // utils.transAll(upgraders, "builder");
@@ -78,10 +90,6 @@ function run() {
   // ================================== 手动操作区 ==================================
 
   utils.watchCreeps(WATCH_QUEUE);
-
-  let harvesters = utils.getCreepsBySpawn(SPAWN_NAME, "harvester");
-  let builders = utils.getCreepsBySpawn(SPAWN_NAME, "builder");
-  let upgraders = utils.getCreepsBySpawn(SPAWN_NAME, "upgrader");
 
   if (need_harvest) {
     flag.run(harvesters, HARVESTER_GROUP, role_harvester.harvester_flag_run);
@@ -96,10 +104,13 @@ function run() {
   }
 
   let spawn_energy = utils.get_room_spawn_energy(SPAWN_NAME);
+  let spawn_extension_energy =
+    utils.get_room_spawn_extension_energy(SPAWN_NAME);
 
   return {
     name: SPAWN_NAME,
     spawn_energy: spawn_energy,
+    spawn_extension_energy: spawn_extension_energy,
     harvesters: harvesters,
     builders: builders,
     upgraders: upgraders,

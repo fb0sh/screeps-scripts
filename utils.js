@@ -127,10 +127,25 @@ function get_room_spawn_energy(spawn) {
   let theSpawn = Game.spawns[spawn];
   let energy_structures = theSpawn.room.find(FIND_STRUCTURES, {
     filter: (structure) => {
-      return (
-        structure.structureType == STRUCTURE_EXTENSION ||
-        structure.structureType == STRUCTURE_SPAWN
-      );
+      return structure.structureType == STRUCTURE_SPAWN;
+    },
+  });
+  let room_spawn_energy = 0;
+  energy_structures.forEach((structure) => {
+    room_spawn_energy += structure.store.energy;
+  });
+  return room_spawn_energy;
+}
+
+/**
+ *
+ * @param {string} spawn
+ */
+function get_room_spawn_extension_energy(spawn) {
+  let theSpawn = Game.spawns[spawn];
+  let energy_structures = theSpawn.room.find(FIND_STRUCTURES, {
+    filter: (structure) => {
+      return structure.structureType == STRUCTURE_EXTENSION;
     },
   });
   let room_spawn_energy = 0;
@@ -157,11 +172,13 @@ function watchSpawn(spawn, category, number, body) {
   if (creeps.length < number) {
     let name = category + Game.time;
     // 看能量是否可以 创建新的 creep
-    let room_total_energy = get_room_spawn_energy(spawn);
+    let room_total_energy =
+      get_room_spawn_energy(spawn) + get_room_spawn_extension_energy(spawn);
     if (room_total_energy >= cost) {
       let status = theSpawn.spawnCreep(body, name, {
         memory: { role: category, spawn: spawn },
       });
+
       console.log(
         `(${status}) Spawning new ${category} creep: ${name}, cost: ${cost}`
       );
@@ -199,10 +216,42 @@ function watchCreeps(watch_queue) {
 /**
  *
  * @param {Creep} creep
+ */
+function recover(creep) {
+  if (creep.memory.last_role) {
+    creep.say(`${creep.memory.role}->${creep.memory.last_role}`);
+    creep.memory.role = creep.memory.last_role;
+  }
+}
+/**
+ *
+ * @param {Creep[]} creeps
+ */
+
+function recoverAll(creeps) {
+  creeps.forEach((creep) => {
+    recover(creep);
+  });
+}
+
+/**
+ *
+ * @param {Creep[]} creeps
+ * @param {string} category
+ */
+function recoverLastCategory(creeps, category) {
+  let cs = _.filter(creeps, (creep) => creep.last_role == category);
+  recoverAll(cs);
+}
+
+/**
+ *
+ * @param {Creep} creep
  * @param {string} category
  */
 function trans2(creep, category) {
   creep.say(`${creep.memory.role}->${category}`);
+  creep.memory.last_role = creep.memory.role;
   creep.memory.role = category;
 }
 /**
@@ -298,12 +347,19 @@ function moveToSpawn(creeps, spawn) {
 
 /**
  *
- * @param {{name,spawn_energy,harvesters,builders,upgraders}} spawn_data
+ * @param {{name,spawn_energy,spawn_extension_energy,harvesters,builders,upgraders}} spawn_data
  */
 function logSpawnStatus(spawn_data) {
-  let { name, spawn_energy, harvesters, builders, upgraders } = spawn_data;
+  let {
+    name,
+    spawn_energy,
+    spawn_extension_energy,
+    harvesters,
+    builders,
+    upgraders,
+  } = spawn_data;
   console.log(
-    `(${name}) spawn_energy: ${spawn_energy} | harvesters: ${harvesters.length} | builder: ${builders.length} | upgrader: ${upgraders.length} |`
+    `(${name}) spawn_energy: ${spawn_energy} | spawn_extension_energy: ${spawn_extension_energy} | harvesters: ${harvesters.length} | builder: ${builders.length} | upgrader: ${upgraders.length} |`
   );
 }
 
@@ -322,11 +378,16 @@ module.exports = {
   // move
   moveToFlag: moveToFlag,
   moveToSpawn: moveToSpawn,
+  // recover
+  recover: recover,
+  recoverAll: recoverAll,
+  recoverLastCategory: recoverLastCategory,
   //
   watchSpawn: watchSpawn,
   watchCreeps: watchCreeps,
   clear_creeps: clear_creeps,
   count_cost: count_cost,
   get_room_spawn_energy: get_room_spawn_energy,
+  get_room_spawn_extension_energy: get_room_spawn_extension_energy,
   logSpawnStatus: logSpawnStatus,
 };
