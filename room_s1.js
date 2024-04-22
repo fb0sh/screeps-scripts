@@ -13,27 +13,34 @@ function run() {
   const harvest_number = 10;
   const builder_number = 10;
   const upgrader_number = 20;
+  WATCH_QUEUE = [];
 
-  let harvesters = utils.get_creeps(SPAWN_NAME, "harvester");
-  let builders = utils.get_creeps(SPAWN_NAME, "builder");
-  let upgraders = utils.get_creeps(SPAWN_NAME, "upgrader");
+  WATCH_QUEUE.push([SPAWN_NAME, "harvester", 10, [WORK, MOVE, CARRY]]);
+  WATCH_QUEUE.push([SPAWN_NAME, "builder", 10, [WORK, MOVE, CARRY]]);
+  WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 20, [WORK, MOVE, CARRY]]);
+
+  console.log(WATCH_QUEUE);
+
+  let harvesters = utils.getCreepsBySpawn(SPAWN_NAME, "harvester");
+  let builders = utils.getCreepsBySpawn(SPAWN_NAME, "builder");
+  let upgraders = utils.getCreepsBySpawn(SPAWN_NAME, "upgrader");
 
   if (harvesters.length != harvest_number) {
-    utils.watch_spawn(SPAWN_NAME, "harvester", harvest_number, [
+    utils.watchSpawn(SPAWN_NAME, "harvester", harvest_number, [
       WORK,
       MOVE,
       CARRY,
     ]);
   } else {
     if (builders.length != builder_number) {
-      utils.watch_spawn(SPAWN_NAME, "builder", builder_number, [
+      utils.watchSpawn(SPAWN_NAME, "builder", builder_number, [
         WORK,
         MOVE,
         CARRY,
       ]);
     } else {
       if (upgraders.length != upgrader_number) {
-        utils.watch_spawn(SPAWN_NAME, "upgrader", upgrader_number, [
+        utils.watchSpawn(SPAWN_NAME, "upgrader", upgrader_number, [
           WORK,
           MOVE,
           CARRY,

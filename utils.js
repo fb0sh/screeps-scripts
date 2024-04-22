@@ -37,6 +37,7 @@ function count_cost(body) {
 
   return cost;
 }
+
 function clear_creeps() {
   for (let name in Memory.creeps) {
     if (!Game.creeps[name]) {
@@ -50,13 +51,72 @@ function clear_creeps() {
  * @param {string} spawn
  * @param {string} category
  * @returns {Creep[]} creeps
+ * @returns {Creep[]}
  */
-function get_creeps(spawn, category) {
-  let creeps = _.filter(
-    Game.creeps,
-    (creep) => creep.memory.role == category && creep.memory.spawn == spawn
-  );
-  return creeps.sort();
+function getCreepsBySpawn(spawn, category, creeps) {
+  let source_creeps = Game.creeps;
+  if (creeps) {
+    source_creeps = creeps;
+  }
+  let res_creeps = _.filter(source_creeps, (creep) => {
+    if (category) {
+      return creep.memory.role == category && creep.memory.spawn == spawn;
+    } else {
+      return creep.memory.spawn == spawn;
+    }
+  }).sort();
+  return res_creeps;
+}
+
+/**
+ *
+ * @param {string} room_name
+ * @param {string} category
+ * @param {Creep[]} creeps
+ * @returns {Creep[]}
+ */
+function getCreepsByRoom(room_name, category, creeps) {
+  let room = Game.rooms[room_name];
+  let source_creeps = Game.creeps;
+  if (creeps) {
+    source_creeps = creeps;
+  }
+  let res_creeps = _.filter(source_creeps, (creep) => {
+    if (category) {
+      return creep.memory.role == category && creep.room == room;
+    } else {
+      return creep.room == room;
+    }
+  }).sort();
+  return res_creeps;
+}
+
+/**
+ *
+ * @param {string} category
+ * @param {Creep[]} creeps
+ * @returns {Creep[]}
+ */
+function getCreepsByCategory(category, creeps) {
+  let source_creeps = Game.creeps;
+  if (creeps) {
+    source_creeps = creeps;
+  }
+  let res_creeps = _.filter(
+    source_creeps,
+    (creep) => creep.memory.role == category
+  ).sort();
+  return res_creeps;
+}
+
+/**
+ *
+ * @returns {Creep[]}
+ */
+function getCreeps() {
+  let source_creeps = Game.creeps;
+  let res_creeps = _.filter(source_creeps, (creep) => true).sort;
+  return res_creeps;
 }
 
 /**
@@ -86,11 +146,12 @@ function get_room_spawn_energy(spawn) {
  * @param {string} category
  * @param {number} number
  * @param { BodyPartConstant[]} body
+ * @returns {boolean}
  */
-function watch_spawn(spawn, category, number, body) {
+function watchSpawn(spawn, category, number, body) {
   // 拿到传进来的 spawn
   let theSpawn = Game.spawns[spawn];
-  let creeps = get_creeps(spawn, category);
+  let creeps = getCreepsBySpawn(spawn, category);
   let cost = count_cost(body);
 
   if (creeps.length < number) {
@@ -116,7 +177,30 @@ function watch_spawn(spawn, category, number, body) {
       { align: "left", opacity: 0.8 }
     );
   }
+  return getCreepsBySpawn(spawn, category) >= number;
 }
+
+/**
+ *
+ * @param {[[string, string, number,BodyPartConstant[] ]]} watch_queue
+ */
+function watchCreeps(watch_queue) {
+  let watch_next = true;
+  for (let i = 0; i < watch_queue.length; i++) {
+    if (watch_next) {
+      let spawn = watch_queue[0];
+      let category = watch_queue[1];
+      let number = watch_queue[2];
+      let body = watch_queue[3];
+      if (!watchCreeps(spawn, category, number, body)) {
+        watch_next = false;
+      }
+    } else {
+      break;
+    }
+  }
+}
+
 /**
  *
  * @param {Creep} creep
@@ -218,16 +302,24 @@ function moveToSpawn(creeps, spawn) {
 }
 
 module.exports = {
-  clear_creeps: clear_creeps,
-  watch_spawn: watch_spawn,
-  get_creeps: get_creeps,
-  count_cost: count_cost,
+  // get creeps
+  getCreeps: getCreeps,
+  getCreepsByCategory: getCreepsByCategory,
+  getCreepsBySpawn: getCreepsBySpawn,
+  getCreepsByRoom: getCreepsByRoom,
+  // trans
   trans2: trans2,
   transAll: transAll,
   transFulled: transFulled,
   transPart: transPart,
   transFree: transFree,
-  get_room_spawn_energy: get_room_spawn_energy,
+  // move
   moveToFlag: moveToFlag,
   moveToSpawn: moveToSpawn,
+  //
+  watchSpawn: watchSpawn,
+  watchCreeps: watchCreeps,
+  clear_creeps: clear_creeps,
+  count_cost: count_cost,
+  get_room_spawn_energy: get_room_spawn_energy,
 };
