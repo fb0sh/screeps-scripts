@@ -45,7 +45,13 @@ function harvester_flag_run(creeps, flags) {
             );
           },
         });
-        targets = targets.concat(structures.sort());
+        targets = targets.concat(
+          structures.sort((a, b) => {
+            let distA = _source_flag.pos.getRangeTo(a);
+            let distB = _source_flag.pos.getRangeTo(b);
+            return distA - distB;
+          })
+        );
       }
 
       if (targets.length > 0) {
