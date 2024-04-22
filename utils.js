@@ -169,22 +169,25 @@ function watchSpawn(spawn, category, number, body) {
   let creeps = getCreepsBySpawn(spawn, category);
   let cost = count_cost(body);
 
-  if (creeps.length < number) {
+  if (
+    creeps.length < number &&
+    !theSpawn.spawning &&
+    !Memory.spawnTicks[spawn]
+  ) {
     let name = category + Game.time;
-    // 看能量是否可以 创建新的 creep
-    let room_total_energy =
-      get_room_spawn_energy(spawn) + get_room_spawn_extension_energy(spawn);
-    if (room_total_energy >= cost) {
-      let status = theSpawn.spawnCreep(body, name, {
-        memory: { role: category, spawn: spawn },
-      });
 
+    let status = theSpawn.spawnCreep(body, name, {
+      memory: { role: category, spawn: spawn },
+    });
+    if (status == 0) {
       console.log(
         `[*] (${status}) Spawning new ${category} creep: ${name}, cost: ${cost}`
       );
+      Memory.spawnTicks[spawn] = true;
+    } else {
+      console.log(`[-] (${status}) ${category}: ${cost}`);
     }
   }
-
   if (theSpawn.spawning) {
     let spawningCreep = Game.creeps[theSpawn.spawning.name];
     theSpawn.room.visual.text(
@@ -202,15 +205,13 @@ function watchSpawn(spawn, category, number, body) {
  * @param {[[string, string, number,BodyPartConstant[] ]]} watch_queue
  */
 function watchCreeps(watch_queue) {
-  for (let i = 0; i < watch_queue.length; i++) {
+  var watch_next = true;
+  for (let i = 0; i < watch_queue.length && watch_next; i++) {
     let spawn = watch_queue[i][0];
     let category = watch_queue[i][1];
     let number = watch_queue[i][2];
     let body = watch_queue[i][3];
-    // console.log(category);
-    if (!watchSpawn(spawn, category, number, body)) {
-      break;
-    }
+    watch_next = watchSpawn(spawn, category, number, body);
   }
 }
 

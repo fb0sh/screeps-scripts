@@ -7,12 +7,16 @@ function upgrader_flag_run(creeps, flags) {
   let { source_flag, controller_flag } = flags;
   let _source_flag = Game.flags[source_flag];
   if (!_source_flag) {
-    console.log(`[-] flag: ${source_flag} not found`);
+    console.log(
+      `[-] (upgrader_flag_run) source_flag: ${source_flag} not found`
+    );
   }
 
   let _controller_flag = Game.flags[controller_flag];
   if (!_controller_flag) {
-    console.log(`[-] flag: ${controller_flag} not found`);
+    console.log(
+      `[-] (upgrader_flag_run) controller_flag: ${controller_flag} not found`
+    );
   }
 
   creeps.forEach((creep) => {

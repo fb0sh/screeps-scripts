@@ -7,7 +7,9 @@ function harvester_flag_run(creeps, flags) {
   let { source_flag, spawn } = flags;
   let _source_flag = Game.flags[source_flag];
   if (!_source_flag) {
-    console.log(`[-] flag: ${source_flag} not found`);
+    console.log(
+      `[-] (harvester_flag_run) source_flag: ${source_flag} not found`
+    );
   }
 
   creeps.forEach((creep) => {
@@ -28,16 +30,28 @@ function harvester_flag_run(creeps, flags) {
         room = Game.spawns[spawn].room;
       }
 
-      let targets = room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-          return (
-            (structure.structureType == STRUCTURE_EXTENSION ||
-              structure.structureType == STRUCTURE_SPAWN ||
-              structure.structureType == STRUCTURE_CONTAINER) &&
-            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
-          );
-        },
-      });
+      // let c = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+      //   filter: (structure) => {
+      //     return (
+      //       (structure.structureType == STRUCTURE_EXTENSION ||
+      //         structure.structureType == STRUCTURE_SPAWN ||
+      //         structure.structureType == STRUCTURE_CONTAINER) &&
+      //       structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+      //     );
+      //   },
+      // });
+      // console.log(c);
+      let targets = room
+        .find(FIND_STRUCTURES, {
+          filter: (structure) => {
+            return (
+              (structure.structureType == STRUCTURE_EXTENSION ||
+                structure.structureType == STRUCTURE_SPAWN) &&
+              structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+            );
+          },
+        })
+        .sort();
       if (targets.length > 0) {
         let n = creep.transfer(targets[0], RESOURCE_ENERGY);
         if (n == ERR_NOT_IN_RANGE) {

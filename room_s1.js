@@ -7,6 +7,11 @@ const role_builder = require("role.builder");
 function run() {
   const SPAWN_NAME = "s1";
   let = WATCH_QUEUE = [];
+
+  if (Memory.spawnTicks[SPAWN_NAME]) {
+    Memory.spawnTicks[SPAWN_NAME] = false;
+  }
+
   let harvesters = utils.getCreepsBySpawn(SPAWN_NAME, "harvester");
   let upgraders = utils.getCreepsBySpawn(SPAWN_NAME, "upgrader");
   let builders = utils.getCreepsBySpawn(SPAWN_NAME, "builder");
@@ -19,15 +24,15 @@ function run() {
   WATCH_QUEUE.push([
     SPAWN_NAME,
     "harvester",
-    2,
-    [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+    5,
+    [WORK, WORK, CARRY, CARRY, MOVE],
   ]);
-  WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 1, [WORK, MOVE, MOVE, CARRY]]);
-  WATCH_QUEUE.push([SPAWN_NAME, "builder", 35, [WORK, MOVE, MOVE, CARRY]]);
+  WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 30, [WORK, MOVE, MOVE, CARRY]]);
+  WATCH_QUEUE.push([SPAWN_NAME, "builder", 5, [WORK, MOVE, MOVE, CARRY]]);
 
   const HARVESTER_GROUP = [
     {
-      number: 2,
+      number: 5,
       flags: {
         source_flag: "e1",
       },
@@ -41,17 +46,12 @@ function run() {
       },
     },
     {
-      number: 8,
+      number: 12,
       flags: {
         source_flag: "e6",
       },
     },
-    {
-      number: 8,
-      flags: {
-        source_flag: "e10",
-      },
-    },
+
     {
       number: 9,
       flags: {
@@ -59,7 +59,7 @@ function run() {
       },
     },
     {
-      number: 8,
+      number: 12,
       flags: {
         source_flag: "e4",
         controller_flag: "c1",
@@ -69,9 +69,31 @@ function run() {
 
   const UPGRADER_GROUP = [
     {
-      number: 1,
+      number: 9,
       flags: {
-        source_flag: "e1",
+        source_flag: "e4",
+        controller_flag: "c1",
+      },
+    },
+    {
+      number: 8,
+      flags: {
+        source_flag: "e3",
+        controller_flag: "c1",
+      },
+    },
+    {
+      number: 8,
+      flags: {
+        source_flag: "e6",
+        controller_flag: "c1",
+      },
+    },
+    {
+      number: 5,
+      flags: {
+        source_flag: "e5",
+        controller_flag: "c1",
       },
     },
   ];
