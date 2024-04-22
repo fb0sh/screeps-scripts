@@ -1,21 +1,22 @@
 /**
  *
  * @param {Creep[]} creeps
- * @param {string[]} flags
+ * @param {source_flag:string, controller_flag} flags
  */
 function upgrader_flag_run(creeps, flags) {
-  let source_flag = Game.flags[flags[0]];
-  if (!source_flag) {
-    console.log(`[-] flag: ${flags[0]} not found`);
+  let { source_flag, controller_flag } = flags;
+  let _source_flag = Game.flags[source_flag];
+  if (!_source_flag) {
+    console.log(`[-] flag: ${source_flag} not found`);
   }
 
-  let controller_flag = Game.flags[flags[1]];
-  if (!controller_flag) {
-    console.log(`[-] flag: ${flags[1]} not found`);
+  let _controller_flag = Game.flags[controller_flag];
+  if (!_controller_flag) {
+    console.log(`[-] flag: ${controller_flag} not found`);
   }
 
   creeps.forEach((creep) => {
-    creep.memory.es = flags[0];
+    creep.memory.es = source_flag;
     creep.say("⏫️");
     // 切换状态
     if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
@@ -27,7 +28,7 @@ function upgrader_flag_run(creeps, flags) {
       creep.say("⚡ upgrade");
     }
     if (creep.memory.upgrading) {
-      let controller = controller_flag.room.controller;
+      let controller = _controller_flag.room.controller;
 
       let n = creep.upgradeController(controller);
       if (n == ERR_NOT_IN_RANGE) {
@@ -39,7 +40,7 @@ function upgrader_flag_run(creeps, flags) {
       }
     } else {
       try {
-        let source = source_flag.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+        let source = _source_flag.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
         let n = creep.harvest(source);
         if (n == ERR_NOT_IN_RANGE) {
           creep.moveTo(source, {
@@ -47,8 +48,8 @@ function upgrader_flag_run(creeps, flags) {
           });
         }
       } catch (error) {
-        creep.say(`Move to ${flags[0]}`);
-        creep.moveTo(source_flag.pos, {
+        creep.say(`Move to ${source_flag}`);
+        creep.moveTo(_source_flag.pos, {
           visualizePathStyle: { stroke: "#FF0000" },
         });
       }

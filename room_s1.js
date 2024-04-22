@@ -18,24 +18,62 @@ function run() {
   WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 20, [WORK, MOVE, CARRY]]);
 
   const HARVESTER_GROUP = [
-    [5, ["e1"]],
-    [5, ["e2"]],
+    {
+      number: 5,
+      flags: {
+        source_flag: "e1",
+      },
+    },
+    {
+      number: 5,
+      flags: {
+        source_flag: "e2",
+      },
+    },
   ];
   const BUILDER_GROUP = [
-    [5, ["e2"]],
-    [5, ["e5"]],
+    {
+      number: 5,
+      flags: {
+        source_flag: "e2",
+      },
+    },
+    {
+      number: 5,
+      flags: {
+        source_flag: "e5",
+      },
+    },
   ];
   const UPGRADER_GROUP = [
-    [1, ["e1", "c1"]],
-    [9, ["e3", "c1"]],
-    [10, ["e4", "c1"]],
+    {
+      number: 1,
+      flags: {
+        source_flag: "e1",
+        controller_flag: "c1",
+      },
+    },
+    {
+      number: 9,
+      flags: {
+        source_flag: "e1",
+        controller_flag: "c1",
+      },
+    },
+    {
+      number: 10,
+      flags: {
+        source_flag: "e4",
+        controller_flag: "c1",
+      },
+    },
   ];
 
   // utils.transAll(builders, "harvester");
   // utils.transAll(upgraders, "builder");
   // utils.transFulled(harvesters, "upgrader");
-  //   utils.transPart(upgraders, "harvester", 2);
-  //   utils.transFree(harvesters, "builder");
+  // utils.transPart(upgraders, "harvester", 2);
+  // utils.transFree(harvesters, "builder");
 
   // ================================== 手动操作区 ==================================
 

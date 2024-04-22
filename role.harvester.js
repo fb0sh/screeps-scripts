@@ -1,19 +1,20 @@
 /**
  *
  * @param {Creep[]} creeps
- * @param {string[]} flags
+ * @param {{source_flag:string,spawn:string}} flags
  */
 function harvester_flag_run(creeps, flags) {
-  let source_flag = Game.flags[flags[0]];
-  if (!source_flag) {
-    console.log(`[-] flag: ${flags[0]} not found`);
+  let { source_flag, spawn } = flags;
+  let _source_flag = Game.flags[source_flag];
+  if (!_source_flag) {
+    console.log(`[-] flag: ${source_flag} not found`);
   }
 
   creeps.forEach((creep) => {
     creep.say("🪓");
     if (creep.store.getFreeCapacity() > 0) {
       try {
-        let source = source_flag.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+        let source = _source_flag.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
         let n = creep.harvest(source);
         if (n == ERR_NOT_IN_RANGE) {
           creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
@@ -21,16 +22,16 @@ function harvester_flag_run(creeps, flags) {
           console.log(`[-] harvester_flag_run(harvest):[${creep.name}] ${n}`);
         }
       } catch (error) {
-        creep.say(`Move to ${flags[0]}`);
-        creep.moveTo(source_flag.pos, {
+        creep.say(`Move to ${_source_flag}`);
+        creep.moveTo(_source_flag.pos, {
           visualizePathStyle: { stroke: "#FF0000" },
         });
       }
     } else {
       // 收集完资源去哪个spawn 的room保存 默认是创建它的spawn所在room
       let room = Game.spawns[creep.memory.spawn].room;
-      if (flags[1]) {
-        room = Game.spawns[flags[1]].room;
+      if (spawn) {
+        room = Game.spawns[spawn].room;
       }
 
       let targets = room.find(FIND_STRUCTURES, {

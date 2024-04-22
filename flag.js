@@ -9,18 +9,17 @@ function get_flags() {
 /**
  *
  * @param {Creep[]} creeps
- * @param {[[string,number]]} fn_list
- * @param {function(Creep[], string)} f
+ * @param {[{number:number:flags:group}]} fn_list
+ * @param {function(Creep[], group)} f
  *  [2, ["es1"]],
  */
 function run(creeps, fn_list, f) {
   let idx = 0;
   fn_list.forEach((each) => {
     let each_creeps = [];
-    let creep_number = each[0];
-    let flags = each[1];
+    let { number, flags } = each;
 
-    for (i = 0; i < creep_number && idx < creeps.length; i++, idx++) {
+    for (i = 0; i < number && idx < creeps.length; i++, idx++) {
       let creep = creeps[idx];
       each_creeps.push(creep);
     }
