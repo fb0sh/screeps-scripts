@@ -32,7 +32,11 @@ function harvester_flag_run(creeps, flags) {
 
       let targets = [];
       if (!structures_order) {
-        structures_order = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
+        structures_order = [
+          STRUCTURE_EXTENSION,
+          STRUCTURE_SPAWN,
+          STRUCTURE_STORAGE,
+        ];
       }
 
       for (let i = 0; i < structures_order.length; i++) {
@@ -53,8 +57,6 @@ function harvester_flag_run(creeps, flags) {
           })
         );
       }
-
-      console.log(creep.name, targets);
 
       if (targets.length > 0) {
         let n = creep.transfer(targets[0], RESOURCE_ENERGY);

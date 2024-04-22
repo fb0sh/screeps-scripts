@@ -34,21 +34,25 @@ function builder_flag_run(creeps, flags) {
           STRUCTURE_EXTENSION,
           STRUCTURE_ROAD,
           STRUCTURE_STORAGE,
+          STRUCTURE_CONTAINER,
         ];
       }
 
-      for (let i = 0; i < constructions.length; i++) {
-        let site = constructions[i];
-        for (let j = 0; j < construction_order.length; j++) {
-          if (site.structureType == construction_order[j]) {
-            targets.push(site);
-            constructions.splice(i, 1);
-            break;
-          }
-        }
+      for (let i = 0; i < construction_order.length; i++) {
+        let construction_type = construction_order[i];
+        let constructions = room.find(FIND_CONSTRUCTION_SITES, {
+          filter: (construction) => {
+            return construction.structureType == construction_type;
+          },
+        });
+        targets = targets.concat(
+          constructions.sort((a, b) => {
+            let distA = creep.pos.getRangeTo(a);
+            let distB = creep.pos.getRangeTo(b);
+            return distA - distB;
+          })
+        );
       }
-
-      targets = targets.concat(constructions);
 
       if (targets.length) {
         if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {

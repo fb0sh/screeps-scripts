@@ -18,16 +18,16 @@ function run() {
 
   // ================================== 手动操作区 ==================================
   const need_harvest = true;
-  const need_build = true;
+  const need_build = false;
   const need_upgrade = true;
 
   WATCH_QUEUE.push([
     SPAWN_NAME,
     "harvester",
-    5,
+    10,
     [WORK, WORK, CARRY, CARRY, MOVE],
   ]);
-  WATCH_QUEUE.push([SPAWN_NAME, "builder", 20, [WORK, MOVE, MOVE, CARRY]]);
+  WATCH_QUEUE.push([SPAWN_NAME, "builder", 0, [WORK, MOVE, MOVE, CARRY]]);
   WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 30, [WORK, MOVE, MOVE, CARRY]]);
 
   const HARVESTER_GROUP = [
@@ -35,6 +35,13 @@ function run() {
       number: 5,
       flags: {
         source_flag: "e1",
+      },
+    },
+    {
+      number: 5,
+      flags: {
+        source_flag: "e8",
+        structures_order: [STRUCTURE_STORAGE],
       },
     },
   ];
@@ -56,7 +63,7 @@ function run() {
 
   const UPGRADER_GROUP = [
     {
-      number: 9,
+      number: 10,
       flags: {
         source_flag: "e4",
         controller_flag: "c1",
@@ -70,21 +77,21 @@ function run() {
       },
     },
     {
-      number: 4,
+      number: 6,
       flags: {
         source_flag: "e6",
         controller_flag: "c1",
       },
     },
     {
-      number: 8,
+      number: 10,
       flags: {
         source_flag: "e5",
         controller_flag: "c1",
       },
     },
     {
-      number: 5,
+      number: 10,
       flags: {
         source_flag: "e9",
         controller_flag: "c1",
