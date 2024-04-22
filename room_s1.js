@@ -27,8 +27,8 @@ function run() {
     5,
     [WORK, WORK, CARRY, CARRY, MOVE],
   ]);
+  WATCH_QUEUE.push([SPAWN_NAME, "builder", 20, [WORK, MOVE, MOVE, CARRY]]);
   WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 30, [WORK, MOVE, MOVE, CARRY]]);
-  WATCH_QUEUE.push([SPAWN_NAME, "builder", 5, [WORK, MOVE, MOVE, CARRY]]);
 
   const HARVESTER_GROUP = [
     {
@@ -40,29 +40,16 @@ function run() {
   ];
   const BUILDER_GROUP = [
     {
-      number: 2,
+      number: 6,
       flags: {
-        source_flag: "e1",
-      },
-    },
-    {
-      number: 12,
-      flags: {
-        source_flag: "e6",
+        source_flag: "e7",
       },
     },
 
     {
-      number: 9,
+      number: 14,
       flags: {
-        source_flag: "e3",
-      },
-    },
-    {
-      number: 12,
-      flags: {
-        source_flag: "e4",
-        controller_flag: "c1",
+        source_flag: "e8",
       },
     },
   ];
@@ -76,23 +63,30 @@ function run() {
       },
     },
     {
-      number: 8,
+      number: 4,
       flags: {
         source_flag: "e3",
         controller_flag: "c1",
       },
     },
     {
-      number: 8,
+      number: 4,
       flags: {
         source_flag: "e6",
         controller_flag: "c1",
       },
     },
     {
-      number: 5,
+      number: 8,
       flags: {
         source_flag: "e5",
+        controller_flag: "c1",
+      },
+    },
+    {
+      number: 5,
+      flags: {
+        source_flag: "e9",
         controller_flag: "c1",
       },
     },

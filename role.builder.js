@@ -26,6 +26,7 @@ function builder_flag_run(creeps, flags) {
       if (spawn) {
         room = Game.spawns[spawn].room;
       }
+
       let targets = [];
       let constructions = room.find(FIND_CONSTRUCTION_SITES);
       if (!construction_order) {
@@ -69,7 +70,8 @@ function builder_flag_run(creeps, flags) {
           case ERR_NOT_OWNER:
             console.log(`[-] this room was invalid : ${creep.room}`);
             break;
-
+          case ERR_BUSY:
+            break;
           default:
             console.log(`[-] builder_flag_run(harvest):[${creep.name}] ${n}`);
         }

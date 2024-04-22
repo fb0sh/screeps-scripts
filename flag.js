@@ -11,7 +11,7 @@ function get_flags() {
  * @param {Creep[]} creeps
  * @param {[{number:number:flags:group}]} fn_list
  * @param {function(Creep[], group)} f
- *  [2, ["es1"]],
+ *
  */
 function run(creeps, fn_list, f) {
   let idx = 0;
