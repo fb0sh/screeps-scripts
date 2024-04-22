@@ -10,6 +10,7 @@ function harvester_flag_run(creeps, flags) {
   }
 
   creeps.forEach((creep) => {
+    creep.say("🪓");
     if (creep.store.getFreeCapacity() > 0) {
       try {
         let source = source_flag.pos.findClosestByRange(FIND_SOURCES_ACTIVE);

@@ -16,7 +16,7 @@ function upgrader_flag_run(creeps, flags) {
 
   creeps.forEach((creep) => {
     creep.memory.es = flags[0];
-    creep.say(creep.memory.es);
+    creep.say("⏫️");
     // 切换状态
     if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
       creep.memory.upgrading = false;

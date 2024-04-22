@@ -9,6 +9,7 @@ function builder_flag_run(creeps, flags) {
     console.log(`[-] flag: ${flags[0]} not found`);
   }
   creeps.forEach((creep) => {
+    creep.say("🔨");
     if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
       creep.memory.building = false;
       creep.say("🔄 harvest");

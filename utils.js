@@ -177,7 +177,7 @@ function watchSpawn(spawn, category, number, body) {
       { align: "left", opacity: 0.8 }
     );
   }
-  return getCreepsBySpawn(spawn, category) >= number;
+  return getCreepsBySpawn(spawn, category).length >= number;
 }
 
 /**
@@ -185,17 +185,12 @@ function watchSpawn(spawn, category, number, body) {
  * @param {[[string, string, number,BodyPartConstant[] ]]} watch_queue
  */
 function watchCreeps(watch_queue) {
-  let watch_next = true;
   for (let i = 0; i < watch_queue.length; i++) {
-    if (watch_next) {
-      let spawn = watch_queue[0];
-      let category = watch_queue[1];
-      let number = watch_queue[2];
-      let body = watch_queue[3];
-      if (!watchCreeps(spawn, category, number, body)) {
-        watch_next = false;
-      }
-    } else {
+    let spawn = watch_queue[i][0];
+    let category = watch_queue[i][1];
+    let number = watch_queue[i][2];
+    let body = watch_queue[i][3];
+    if (!watchSpawn(spawn, category, number, body)) {
       break;
     }
   }
@@ -301,6 +296,17 @@ function moveToSpawn(creeps, spawn) {
   });
 }
 
+/**
+ *
+ * @param {{name,spawn_energy,harvesters,builders,upgraders}} spawn_data
+ */
+function logSpawnStatus(spawn_data) {
+  let { name, spawn_energy, harvesters, builders, upgraders } = spawn_data;
+  console.log(
+    `(${name}) spawn_energy: ${spawn_energy} | harvesters: ${harvesters.length} | builder: ${builders.length} | upgrader: ${upgraders.length} |`
+  );
+}
+
 module.exports = {
   // get creeps
   getCreeps: getCreeps,
@@ -322,4 +328,5 @@ module.exports = {
   clear_creeps: clear_creeps,
   count_cost: count_cost,
   get_room_spawn_energy: get_room_spawn_energy,
+  logSpawnStatus: logSpawnStatus,
 };
