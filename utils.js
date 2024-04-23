@@ -175,9 +175,11 @@ function watchSpawn(spawn, category, number, body) {
     !Memory.spawnTicks[spawn]
   ) {
     let name = category + Game.time;
-
     let status = theSpawn.spawnCreep(body, name, {
-      memory: { role: category, spawn: spawn },
+      memory: {
+        role: category,
+        spawn: spawn,
+      },
     });
     if (status == 0) {
       console.log(

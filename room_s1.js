@@ -25,23 +25,35 @@ function run() {
     SPAWN_NAME,
     "harvester",
     10,
-    [WORK, WORK, CARRY, CARRY, MOVE],
+    [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
   ]);
   WATCH_QUEUE.push([SPAWN_NAME, "builder", 0, [WORK, MOVE, MOVE, CARRY]]);
-  WATCH_QUEUE.push([SPAWN_NAME, "upgrader", 30, [WORK, MOVE, MOVE, CARRY]]);
+  WATCH_QUEUE.push([
+    SPAWN_NAME,
+    "upgrader",
+    0,
+    [
+      WORK,
+      WORK,
+      WORK,
+      MOVE,
+      MOVE,
+      MOVE,
+      MOVE,
+      MOVE,
+      MOVE,
+      MOVE,
+      MOVE,
+      CARRY,
+      CARRY,
+    ],
+  ]);
 
   const HARVESTER_GROUP = [
     {
-      number: 5,
+      number: 10,
       flags: {
         source_flag: "e1",
-      },
-    },
-    {
-      number: 5,
-      flags: {
-        source_flag: "e8",
-        structures_order: [STRUCTURE_STORAGE],
       },
     },
   ];
@@ -103,7 +115,7 @@ function run() {
   // utils.transAll(builders, "upgrader");
 
   // utils.transAll(builders, "harvester");
-  // utils.transAll(upgraders, "builder");
+  // utils.transAll(upgraders, "harvester");
   // utils.transFulled(harvesters, "upgrader");
   // utils.transPart(upgraders, "harvester", 2);
   // utils.transFree(harvesters, "builder");
