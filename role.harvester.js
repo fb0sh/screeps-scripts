@@ -108,9 +108,14 @@ function harvester_flag_run(creeps, flags) {
             break;
           case ERR_NOT_IN_RANGE:
             creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
+            break;
           case ERR_NOT_OWNER:
             console.log(`[-] this room was invalid : ${creep.room}`);
+            break;
           case ERR_BUSY:
+            break;
+          case ERR_INVALID_TARGET:
+            console.log(`[-] invalid_target ${creep.room} ${_source_flag}`);
             break;
           default:
             console.log(`[-] harvester_flag_run(harvest):[${creep.name}] ${n}`);

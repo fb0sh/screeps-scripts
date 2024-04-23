@@ -18,20 +18,25 @@ function run() {
 
   // ================================== 手动操作区 ==================================
   const need_harvest = true;
-  const need_build = false;
+  const need_build = true;
   const need_upgrade = true;
 
   WATCH_QUEUE.push([
     SPAWN_NAME,
     "harvester",
     10,
-    [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+    [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
   ]);
-  WATCH_QUEUE.push([SPAWN_NAME, "builder", 0, [WORK, MOVE, MOVE, CARRY]]);
+  WATCH_QUEUE.push([
+    SPAWN_NAME,
+    "builder",
+    0,
+    [WORK, WORK, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY],
+  ]);
   WATCH_QUEUE.push([
     SPAWN_NAME,
     "upgrader",
-    0,
+    20,
     [
       WORK,
       WORK,
@@ -51,24 +56,23 @@ function run() {
 
   const HARVESTER_GROUP = [
     {
-      number: 10,
+      number: 2,
       flags: {
         source_flag: "e1",
+      },
+    },
+    {
+      number: 8,
+      flags: {
+        source_flag: "e9",
       },
     },
   ];
   const BUILDER_GROUP = [
     {
-      number: 6,
+      number: 10,
       flags: {
-        source_flag: "e7",
-      },
-    },
-
-    {
-      number: 14,
-      flags: {
-        source_flag: "e8",
+        source_flag: "e4",
       },
     },
   ];
@@ -77,35 +81,14 @@ function run() {
     {
       number: 10,
       flags: {
-        source_flag: "e4",
-        controller_flag: "c1",
-      },
-    },
-    {
-      number: 4,
-      flags: {
         source_flag: "e3",
         controller_flag: "c1",
       },
     },
     {
-      number: 6,
-      flags: {
-        source_flag: "e6",
-        controller_flag: "c1",
-      },
-    },
-    {
       number: 10,
       flags: {
-        source_flag: "e5",
-        controller_flag: "c1",
-      },
-    },
-    {
-      number: 10,
-      flags: {
-        source_flag: "e9",
+        source_flag: "e4",
         controller_flag: "c1",
       },
     },

@@ -16,6 +16,7 @@ function find_build_target_id(creep, spawn, construction_order) {
       STRUCTURE_ROAD,
       STRUCTURE_STORAGE,
       STRUCTURE_CONTAINER,
+      STRUCTURE_RAMPART,
     ];
   }
   let targets = [];
@@ -34,8 +35,11 @@ function find_build_target_id(creep, spawn, construction_order) {
         })
     );
   });
-
-  return targets[0].id;
+  if (targets[0]) {
+    return targets[0].id;
+  } else {
+    return undefined;
+  }
 }
 
 /**
@@ -85,6 +89,9 @@ function builder_flag_run(creeps, flags) {
           creep.moveTo(build_target, {
             visualizePathStyle: { stroke: "#0000FF" },
           });
+          break;
+        case ERR_INVALID_TARGET:
+          creep.memory.build_target_id = undefined;
           break;
 
         default:
