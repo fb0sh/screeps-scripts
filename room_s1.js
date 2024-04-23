@@ -24,7 +24,7 @@ function run() {
   WATCH_QUEUE.push([
     SPAWN_NAME,
     "harvester",
-    10,
+    22,
     [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
   ]);
   WATCH_QUEUE.push([
@@ -36,7 +36,7 @@ function run() {
   WATCH_QUEUE.push([
     SPAWN_NAME,
     "upgrader",
-    20,
+    40,
     [
       WORK,
       WORK,
@@ -56,7 +56,7 @@ function run() {
 
   const HARVESTER_GROUP = [
     {
-      number: 2,
+      number: 5,
       flags: {
         source_flag: "e1",
       },
@@ -64,7 +64,15 @@ function run() {
     {
       number: 8,
       flags: {
-        source_flag: "e9",
+        source_flag: "e4",
+        structures_order: [STRUCTURE_EXTENSION, STRUCTURE_STORAGE],
+      },
+    },
+    {
+      number: 9,
+      flags: {
+        source_flag: "e3",
+        structures_order: [STRUCTURE_EXTENSION, STRUCTURE_STORAGE],
       },
     },
   ];
@@ -79,16 +87,23 @@ function run() {
 
   const UPGRADER_GROUP = [
     {
-      number: 10,
+      number: 13,
       flags: {
-        source_flag: "e3",
+        source_flag: "e9",
         controller_flag: "c1",
       },
     },
     {
-      number: 10,
+      number: 12,
       flags: {
-        source_flag: "e4",
+        source_flag: "e2",
+        controller_flag: "c1",
+      },
+    },
+    {
+      number: 15,
+      flags: {
+        source_flag: "e5",
         controller_flag: "c1",
       },
     },
@@ -97,7 +112,7 @@ function run() {
   // utils.recoverLastCategory(upgraders, "builder");
   // utils.transAll(builders, "upgrader");
 
-  // utils.transAll(builders, "harvester");
+  // utils.transAll(builders, "upgrader");
   // utils.transAll(upgraders, "harvester");
   // utils.transFulled(harvesters, "upgrader");
   // utils.transPart(upgraders, "harvester", 2);

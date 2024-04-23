@@ -1,10 +1,11 @@
 /**
  *
- * @param {Creep} creepm
+ * @param {Creep} creep
  * @param {string} spawn
  * @param {[string]} construction_order
+ * @param {string} broken  已被其他creep占领的target
  */
-function find_build_target_id(creep, spawn, construction_order) {
+function find_build_target_id(creep, spawn, construction_order, broken) {
   // 可指定 去 其他spawn的room 建设
   let room = Game.spawns[creep.memory.spawn].room;
   if (spawn) {
@@ -35,6 +36,17 @@ function find_build_target_id(creep, spawn, construction_order) {
         })
     );
   });
+
+  if (broken) {
+    let temp = [];
+    for (let i = 0; i < targets.length; i++) {
+      if (targets[i].id != broken) {
+        temp.push(targets[i]);
+      }
+    }
+    targets = temp;
+  }
+
   if (targets[0]) {
     return targets[0].id;
   } else {

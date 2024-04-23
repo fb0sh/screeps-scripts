@@ -3,8 +3,9 @@
  * @param {Creep} creep
  * @param {string} spawn
  * @param {[string]} structures_order
+ * @param {string} broken  已被其他creep占领的target
  */
-function find_save_target_id(creep, spawn, structures_order) {
+function find_save_target_id(creep, spawn, structures_order, broken) {
   // 收集完资源去哪个spawn 的room保存 默认是创建它的spawn所在room
   let room = Game.spawns[creep.memory.spawn].room;
   if (spawn) {
@@ -36,6 +37,16 @@ function find_save_target_id(creep, spawn, structures_order) {
         })
     );
   });
+
+  if (broken) {
+    let temp = [];
+    for (let i = 0; i < targets.length; i++) {
+      if (targets[i].id != broken) {
+        temp.push(targets[i]);
+      }
+    }
+    targets = temp;
+  }
 
   return targets[0].id;
 }
@@ -92,7 +103,13 @@ function harvester_flag_run(creeps, flags) {
           });
           break;
         case ERR_FULL:
-          creep.memory.save_target_id = undefined;
+          // 排除错误 以下一个为目标
+          creep.memory.save_target_id = find_save_target_id(
+            creep,
+            spawn,
+            structures_order,
+            creep.memory.save_target_id
+          );
           break;
 
         default:
